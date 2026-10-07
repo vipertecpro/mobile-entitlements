@@ -3,6 +3,20 @@
 All notable changes to `vipertecpro/mobile-entitlements` are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `mobile-entitlements:report {--days=30} {--json}`: active subscribers, trials, new subscriptions,
+  churn, refunds, one-time unlocks and consumables sold, by store. Sandbox rows are excluded.
+- `GET /mobile-entitlements/summary?days=30`: the same report as JSON, behind
+  `middleware.summary` (default `api`, `auth:sanctum`, `can:viewMobileEntitlementsSummary`).
+- Optional `prices` config (monthly amount per product id) adds `estimated_mrr` and
+  `unpriced_subscribers`. Without it the report shows counts only.
+- `POST /mobile-entitlements/promo-signature`: StoreKit 2 promotional offer JWS signed with an
+  In-App Purchase key (`apple.promo_key_id`, `apple.promo_private_key`, falling back to the server
+  API key). Off by default (`apple.promo_offers`). Optional `redeemMobileEntitlementsPromoOffer` Gate.
+
 ## [1.0.0] - 2026-10-08
 
 ### Added

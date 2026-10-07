@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Vipertecpro\MobileEntitlements\Http\Controllers\AppleNotificationController;
 use Vipertecpro\MobileEntitlements\Http\Controllers\GoogleNotificationController;
+use Vipertecpro\MobileEntitlements\Http\Controllers\PromotionalOfferSignatureController;
+use Vipertecpro\MobileEntitlements\Http\Controllers\SummaryController;
 use Vipertecpro\MobileEntitlements\Http\Controllers\SyncController;
 
 Route::prefix((string) config('mobile-entitlements.route_prefix', 'mobile-entitlements'))
@@ -22,4 +24,15 @@ Route::prefix((string) config('mobile-entitlements.route_prefix', 'mobile-entitl
                 ['throttle:mobile-entitlements-sync'],
             ))
             ->name('sync');
+
+        Route::post('promo-signature', PromotionalOfferSignatureController::class)
+            ->middleware(array_merge(
+                (array) config('mobile-entitlements.middleware.sync', ['api', 'auth:sanctum']),
+                ['throttle:mobile-entitlements-sync'],
+            ))
+            ->name('promo-signature');
+
+        Route::get('summary', SummaryController::class)
+            ->middleware((array) config('mobile-entitlements.middleware.summary', ['api', 'auth:sanctum', 'can:viewMobileEntitlementsSummary']))
+            ->name('summary');
     });

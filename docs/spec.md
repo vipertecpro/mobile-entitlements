@@ -68,3 +68,8 @@ Title "Mobile Entitlements for Laravel". Sections: Why, Install (`composer requi
 ## 8. Report format
 
 Under 300 words: files, `composer test` tail, open questions, deviations.
+
+# Addendum (2026-10-08): revenue report and promotional offer signatures
+- `php artisan mobile-entitlements:report {--days=30} {--json}`: active subscribers now, in trial, new subscriptions, churned (expired or revoked), refunds, one-time unlocks sold, consumables sold, by store; prints a table or JSON. Also `GET /mobile-entitlements/summary?days=30` (middleware configurable, default `['api','auth:sanctum','can:viewMobileEntitlementsSummary']`; document the Gate) returning the same JSON. No revenue amounts are invented: counts only, plus `estimated_mrr` ONLY when `config('mobile-entitlements.prices')` maps product ids to monthly amounts (optional).
+- Promotional offer signatures (Apple, StoreKit 2 JWS format): `POST /mobile-entitlements/promo-signature {productId, offerId, appAccountToken?}` (auth as /sync) → ES256 compact JWS per Apple's "Generating JWS to sign App Store requests" for promotional offers: header `{alg:ES256, kid, typ:JWT}` claims `{iss: issuerId, iat, exp (<= 1h), aud: 'promotional-offer', bid: bundleId, nonce: uuid, productId, offerIdentifier, appAccountToken?}` signed with the App Store Connect in-app purchase key configured as `apple.promo_key_id` / `apple.promo_private_key` (fall back to the server API key if not set, but document that Apple expects an In-App Purchase key). Verify the claim set against Apple's current documentation online before coding and cite the URL in docs/references.md. Response `{signature}`. Tests: structure, expiry, 403 when disabled (`apple.promo_offers` false by default).
+- README sections for both. Tests green, Pint.

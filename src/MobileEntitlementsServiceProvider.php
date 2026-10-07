@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Vipertecpro\MobileEntitlements\Apple\AppleJwsVerifier;
 use Vipertecpro\MobileEntitlements\Apple\AppStoreServerApiClient;
+use Vipertecpro\MobileEntitlements\Apple\PromotionalOfferSigner;
 use Vipertecpro\MobileEntitlements\Console\ReconcileCommand;
+use Vipertecpro\MobileEntitlements\Console\ReportCommand;
 use Vipertecpro\MobileEntitlements\Google\GooglePurchaseMapper;
 use Vipertecpro\MobileEntitlements\Google\PlayDeveloperApiClient;
 use Vipertecpro\MobileEntitlements\Google\PubSubTokenVerifier;
 use Vipertecpro\MobileEntitlements\Http\Middleware\EnsureEntitled;
+use Vipertecpro\MobileEntitlements\Support\RevenueReport;
 
 class MobileEntitlementsServiceProvider extends ServiceProvider
 {
@@ -33,6 +36,17 @@ class MobileEntitlementsServiceProvider extends ServiceProvider
             $app['config']->get('mobile-entitlements.apple.key_id'),
             $app['config']->get('mobile-entitlements.apple.private_key'),
             $app['config']->get('mobile-entitlements.apple.bundle_id'),
+        ));
+
+        $this->app->bind(PromotionalOfferSigner::class, fn (Application $app): PromotionalOfferSigner => new PromotionalOfferSigner(
+            $app['config']->get('mobile-entitlements.apple.issuer_id'),
+            $app['config']->get('mobile-entitlements.apple.promo_key_id') ?: $app['config']->get('mobile-entitlements.apple.key_id'),
+            $app['config']->get('mobile-entitlements.apple.promo_private_key') ?: $app['config']->get('mobile-entitlements.apple.private_key'),
+            $app['config']->get('mobile-entitlements.apple.bundle_id'),
+        ));
+
+        $this->app->bind(RevenueReport::class, fn (Application $app): RevenueReport => new RevenueReport(
+            (array) $app['config']->get('mobile-entitlements.prices', []),
         ));
 
         $this->app->bind(PubSubTokenVerifier::class, fn (Application $app): PubSubTokenVerifier => new PubSubTokenVerifier(
@@ -66,7 +80,7 @@ class MobileEntitlementsServiceProvider extends ServiceProvider
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'mobile-entitlements-migrations');
 
-            $this->commands([ReconcileCommand::class]);
+            $this->commands([ReconcileCommand::class, ReportCommand::class]);
         }
 
         RateLimiter::for('mobile-entitlements-sync', function (Request $request): Limit {

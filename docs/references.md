@@ -21,6 +21,10 @@ Apple's pages render client-side; their content was read through the JSON form o
 - Subscription `status` values (1 active, 2 expired, 3 billing retry, 4 grace period, 5 revoked): https://developer.apple.com/documentation/appstoreserverapi/status
 - StatusResponse: https://developer.apple.com/documentation/appstoreserverapi/statusresponse
 - API JWT (ES256, kid, iss, iat, exp up to 1 hour, aud `appstoreconnect-v1`, bid): https://developer.apple.com/documentation/appstoreserverapi/generating-json-web-tokens-for-api-requests
+- Promotional offer JWS (checked 2026-10-08; header `alg`/`kid`/`typ`, claims `iss`, `iat`, `aud` `promotional-offer`, `bid`, `nonce`, `productId`, `offerIdentifier`, optional `transactionId`; no `exp`, which "makes the request fail"; use an In-App Purchase key): https://developer.apple.com/documentation/storekit/generating-jws-to-sign-app-store-requests
+- Passing the signature in the app: https://developer.apple.com/documentation/storekit/product/purchaseoption/promotionaloffer(_:compactjws:)
+- Promotional offers overview: https://developer.apple.com/documentation/storekit/implementing-promotional-offers-in-your-app
+- Apple's own implementation (`PromotionalOfferV2SignatureCreator`, same claim set): https://github.com/apple/app-store-server-library-python/blob/main/appstoreserverlibrary/jws_signature_creator.py
 - Chain rules (exactly three certificates, leaf OID `1.2.840.113635.100.6.11.1`, intermediate OID `1.2.840.113635.100.6.2.1`), from Apple's own App Store Server Library: https://github.com/apple/app-store-server-library-python/blob/main/appstoreserverlibrary/signed_data_verifier.py
 - Apple PKI (root certificates): https://www.apple.com/certificateauthority/
 

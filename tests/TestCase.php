@@ -35,6 +35,7 @@ abstract class TestCase extends Orchestra
 
         $app['config']->set('mobile-entitlements.user_model', User::class);
         $app['config']->set('mobile-entitlements.middleware.sync', ['api', 'auth']);
+        $app['config']->set('mobile-entitlements.middleware.summary', ['api', 'auth', 'can:viewMobileEntitlementsSummary']);
         $app['config']->set('mobile-entitlements.entitlements', [
             'pro' => ['com.example.pro.monthly', 'com.example.pro.yearly', 'pro_monthly', 'pro_yearly'],
             'lifetime' => ['com.example.lifetime', 'lifetime_unlock'],

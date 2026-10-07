@@ -67,13 +67,15 @@ Map entitlement keys to store product ids in `config/mobile-entitlements.php`:
 
 ### Routes
 
-The package registers three routes under the `route_prefix` (default `mobile-entitlements`):
+The package registers these routes under the `route_prefix` (default `mobile-entitlements`):
 
 | Method | URI | Middleware | Purpose |
 | --- | --- | --- | --- |
 | POST | `/mobile-entitlements/apple` | `middleware.webhooks` (default `api`) | App Store Server Notifications V2 |
 | POST | `/mobile-entitlements/google` | `middleware.webhooks` (default `api`) | Pub/Sub push for Play RTDN |
 | POST | `/mobile-entitlements/sync` | `middleware.sync` (default `api`, `auth:sanctum`) + 60 requests/minute per user | Link a purchase to the signed-in user |
+| POST | `/mobile-entitlements/promo-signature` | same as `/sync` | Sign an App Store promotional offer (off by default) |
+| GET | `/mobile-entitlements/summary` | `middleware.summary` (default `api`, `auth:sanctum`, `can:viewMobileEntitlementsSummary`) | Subscriber and sales counts as JSON |
 
 The webhook routes are limited to `webhook_rate_limit` requests per minute per IP (default 120).
 They use the `api` group, so they are not subject to CSRF checks. If you move them
@@ -275,6 +277,124 @@ php artisan mobile-entitlements:reconcile --user=42
 
 Google rows are refreshed from the Play Developer API. Apple rows are refreshed from the App Store
 Server API when `verify_with_server_api` is on; otherwise their stored expiry is applied.
+
+## Revenue report
+
+Counts from the `entitlements` table, by store:
+
+```sh
+php artisan mobile-entitlements:report            # last 30 days, as a table
+php artisan mobile-entitlements:report --days=7 --json
+```
+
+| Metric | Meaning |
+| --- | --- |
+| `active_subscribers` | Subscriptions that grant access now (grace period included) |
+| `in_trial` | Active subscriptions in a free trial |
+| `new_subscriptions` | Subscriptions first seen in the period |
+| `churned` | Subscriptions without access now that expired or were revoked in the period |
+| `refunds` | Apple refunds and Google voided purchases in the period, any product type |
+| `one_time_unlocks_sold` | Non-consumables first seen in the period |
+| `consumables_sold` | Total quantity of consumables first seen in the period |
+
+Sandbox rows are left out. "First seen" is when the package created the row, from a webhook or
+`/sync`, so purchases made before you installed the package are not counted as new.
+
+The report never invents amounts. To add `estimated_mrr`, list a monthly amount per subscription
+product id, all in one currency:
+
+```php
+'prices' => [
+    'com.example.pro.monthly' => 9.99,
+    'com.example.pro.yearly' => 99.99 / 12,
+    'pro_monthly' => 9.99,
+],
+```
+
+`estimated_mrr` is the sum of those amounts over active subscribers who are not in a trial. It is
+before store commission and tax, and ignores price changes and introductory prices. Active
+subscribers whose product has no price are counted in `unpriced_subscribers`.
+
+### Summary endpoint
+
+`GET /mobile-entitlements/summary?days=30` returns the same JSON, for a dashboard:
+
+```json
+{
+    "period": {"days": 30, "from": "2026-09-08T10:00:00+00:00", "to": "2026-10-08T10:00:00+00:00"},
+    "stores": {
+        "appStore": {"active_subscribers": 120, "in_trial": 14, "new_subscriptions": 31, "churned": 9, "refunds": 1, "one_time_unlocks_sold": 4, "consumables_sold": 0},
+        "googlePlay": {"active_subscribers": 75, "in_trial": 6, "new_subscriptions": 18, "churned": 5, "refunds": 0, "one_time_unlocks_sold": 2, "consumables_sold": 0}
+    },
+    "total": {"active_subscribers": 195, "in_trial": 20, "new_subscriptions": 49, "churned": 14, "refunds": 1, "one_time_unlocks_sold": 6, "consumables_sold": 0}
+}
+```
+
+It is guarded by the `viewMobileEntitlementsSummary` Gate. Define it in your app; until you do,
+every request gets 403:
+
+```php
+// app/Providers/AppServiceProvider.php
+use Illuminate\Support\Facades\Gate;
+
+public function boot(): void
+{
+    Gate::define('viewMobileEntitlementsSummary', fn ($user): bool => $user->is_admin);
+}
+```
+
+Change `middleware.summary` to use another guard or your own middleware.
+
+## Promotional offer signatures
+
+StoreKit 2 promotional offers need a JWS signed on your server. The package signs it as described
+in Apple's [Generating JWS to sign App Store requests](https://developer.apple.com/documentation/storekit/generating-jws-to-sign-app-store-requests).
+
+1. In App Store Connect open **Users and Access → Integrations → In-App Purchase** and generate a
+   key. Apple expects an In-App Purchase key here, not an App Store Connect API key.
+2. Configure it:
+
+```env
+MOBILE_ENTITLEMENTS_APPLE_PROMO_OFFERS=true
+MOBILE_ENTITLEMENTS_APPLE_ISSUER_ID=57246542-96fe-1a63-e053-0824d011072a
+MOBILE_ENTITLEMENTS_APPLE_PROMO_KEY_ID=2X9R4HXF34
+MOBILE_ENTITLEMENTS_APPLE_PROMO_PRIVATE_KEY=/path/to/SubscriptionKey_2X9R4HXF34.p8
+```
+
+If `promo_key_id` and `promo_private_key` are empty, the App Store Server API key (`key_id`,
+`private_key`) is used. That key is also an In-App Purchase key, so one key can do both.
+
+The app asks for a signature (same authentication as `/sync`):
+
+```sh
+curl -X POST https://your-app.com/mobile-entitlements/promo-signature \
+  -H "Authorization: Bearer $TOKEN" -H "Accept: application/json" \
+  -d productId=com.example.pro.monthly -d offerId=winback_50 -d transactionId=2000000000000001
+```
+
+```json
+{"signature": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjJYOVI0SFhGMzQifQ..."}
+```
+
+and passes it to `Product.PurchaseOption.promotionalOffer(offerID, compactJWS: signature)`.
+
+The JWS header is `{"alg": "ES256", "kid": "<key id>", "typ": "JWT"}` and the claims are `iss`,
+`iat`, `aud: "promotional-offer"`, `bid`, a fresh `nonce` (UUID), `productId`, `offerIdentifier`
+and, when sent, `transactionId` (any transaction of the customer, or their `appTransactionID`;
+Apple recommends it). There is no `exp`: Apple rejects tokens that carry one and enforces the
+expiry from `iat`, so request the signature right before the purchase. Apple's claim set has no
+`appAccountToken`; set it on the purchase with `.appAccountToken(...)` in the app instead.
+
+Without further checks any signed-in user can get any offer signed. To decide who gets which
+offer, define this Gate; when it exists, denied requests get 403:
+
+```php
+Gate::define('redeemMobileEntitlementsPromoOffer', function ($user, string $productId, string $offerId): bool {
+    return $offerId !== 'winback_50' || $user->entitlements()->where('product_id', $productId)->exists();
+});
+```
+
+With `promo_offers` off (the default) the endpoint answers 403. Without a key it answers 503.
 
 ## Testing with fakes
 

@@ -43,6 +43,12 @@ return [
         'sync' => ['api', 'auth:sanctum'],
 
         /*
+        | GET /summary. Define the viewMobileEntitlementsSummary Gate in your app;
+        | without it every request is denied.
+        */
+        'summary' => ['api', 'auth:sanctum', 'can:viewMobileEntitlementsSummary'],
+
+        /*
         | Where the `entitled` middleware sends browser (non-JSON) requests
         | when the entitlement is missing. Null returns 402 JSON always.
         */
@@ -77,6 +83,16 @@ return [
         'verify_with_server_api' => (bool) env('MOBILE_ENTITLEMENTS_APPLE_VERIFY_WITH_SERVER_API', false),
 
         /*
+        | POST /promo-signature: StoreKit 2 promotional offer signatures (JWS). Off by default.
+        | Apple expects an In-App Purchase key (App Store Connect > Users and Access >
+        | Integrations > In-App Purchase). When these are null, key_id and private_key above
+        | are used. The issuer id is always issuer_id above.
+        */
+        'promo_offers' => (bool) env('MOBILE_ENTITLEMENTS_APPLE_PROMO_OFFERS', false),
+        'promo_key_id' => env('MOBILE_ENTITLEMENTS_APPLE_PROMO_KEY_ID'),
+        'promo_private_key' => env('MOBILE_ENTITLEMENTS_APPLE_PROMO_PRIVATE_KEY'), // path to .p8 or the PEM itself
+
+        /*
         | Trusted root certificates (PEM paths) for the x5c chain. Defaults to
         | the bundled Apple Root CA - G3. Only override in tests.
         */
@@ -104,6 +120,23 @@ return [
 
     'reconcile' => [
         'stale' => '24h',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prices (optional)
+    |--------------------------------------------------------------------------
+    |
+    | Monthly amount per subscription product id, all in one currency, used only
+    | for estimated_mrr in mobile-entitlements:report and GET /summary. For a
+    | yearly product enter the yearly price divided by 12. Leave empty and the
+    | report shows counts only.
+    |
+    */
+
+    'prices' => [
+        // 'com.example.pro.monthly' => 9.99,
+        // 'com.example.pro.yearly' => 99.99 / 12,
     ],
 
 ];
