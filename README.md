@@ -166,12 +166,12 @@ A purchase that is already linked to another user is refused with `409`.
 
 ### With the NativePHP plugin
 
-[Subscriptions for NativePHP](https://vipertecpro.com/products/subscriptions) does this in one call:
-`Subscriptions::syncWithServer()` posts the latest purchase to `/sync` and caches the granted keys.
+[Paywalls & Purchases for NativePHP](https://vipertecpro.com/products/purchases) does this in one call:
+`Purchases::syncWithServer()` posts the latest purchase to `/sync` and caches the granted keys.
 Point it at this package:
 
 ```dotenv
-SUBSCRIPTIONS_SERVER_URL=https://your-app.com/mobile-entitlements/sync
+PURCHASES_SERVER_URL=https://your-app.com/mobile-entitlements/sync
 ```
 
 ### From any other client
@@ -326,5 +326,5 @@ Apple, App Store and StoreKit are trademarks of Apple Inc. Google Play and Googl
 trademarks of Google LLC. NativePHP is a trademark of its respective owner. This package is an
 independent project and is not affiliated with, endorsed or sponsored by Apple, Google or NativePHP.
 
-The companion NativePHP plugin, Subscriptions for NativePHP, is sold on
+The companion NativePHP plugin, Paywalls & Purchases for NativePHP, is sold on
 [vipertecpro.com](https://vipertecpro.com).
