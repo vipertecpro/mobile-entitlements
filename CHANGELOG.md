@@ -5,6 +5,10 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-08
+
+Released as a new tag because Packagist freezes a published version to its first commit; the v1.0.0 tag on Packagist points at the pre-rename commit and will not update.
+
 ### Added
 
 - `mobile-entitlements:report {--days=30} {--json}`: active subscribers, trials, new subscriptions,
