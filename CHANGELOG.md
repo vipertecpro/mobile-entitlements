@@ -3,7 +3,7 @@
 All notable changes to `vipertecpro/mobile-entitlements` are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [1.0.0] - 2026-10-09
+## [1.0.0] - 2026-10-08
 
 ### Added
 
