@@ -1,0 +1,36 @@
+{
+  "kind": "androidpublisher#subscriptionPurchaseV2",
+  "regionCode": "US",
+  "lineItems": [
+    {
+      "productId": "pro_monthly",
+      "expiryTime": "@now-1d:iso",
+      "latestSuccessfulOrderId": "GPA.3301-0000-0000-00001..1",
+      "autoRenewingPlan": {
+        "autoRenewEnabled": true,
+        "recurringPrice": {
+          "currencyCode": "USD",
+          "units": "4",
+          "nanos": 990000000
+        }
+      },
+      "offerDetails": {
+        "basePlanId": "monthly",
+        "offerTags": []
+      },
+      "offerPhase": {
+        "basePrice": {}
+      }
+    }
+  ],
+  "startTime": "@now-1d:iso",
+  "subscriptionState": "SUBSCRIPTION_STATE_PAUSED",
+  "latestOrderId": "GPA.3301-0000-0000-00001..1",
+  "acknowledgementState": "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+  "externalAccountIdentifiers": {
+    "obfuscatedExternalAccountId": "b2c3d4e5-0000-4000-8000-000000000002"
+  },
+  "pausedStateContext": {
+    "autoResumeTime": "@now+30d:iso"
+  }
+}

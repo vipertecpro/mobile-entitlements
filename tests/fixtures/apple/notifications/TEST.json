@@ -1,0 +1,12 @@
+{
+  "notificationType": "TEST",
+  "notificationUUID": "4112c192-ab68-5d28-8313-29eb5526b0ff",
+  "data": {
+    "appAppleId": 1234567890,
+    "bundleId": "com.example.app",
+    "bundleVersion": "42",
+    "environment": "Production"
+  },
+  "version": "2.0",
+  "signedDate": "@now"
+}

@@ -1,0 +1,40 @@
+{
+  "notificationType": "REVOKE",
+  "notificationUUID": "78c644e5-394b-51e6-8525-0a71f58a6047",
+  "data": {
+    "appAppleId": 1234567890,
+    "bundleId": "com.example.app",
+    "bundleVersion": "42",
+    "environment": "Production",
+    "status": 5,
+    "transactionInfo": {
+      "transactionId": "2000000000000001",
+      "originalTransactionId": "2000000000000001",
+      "webOrderLineItemId": "1000000000000001",
+      "bundleId": "com.example.app",
+      "productId": "com.example.pro.monthly",
+      "subscriptionGroupIdentifier": "21000001",
+      "purchaseDate": "@now-1d",
+      "originalPurchaseDate": "@now-1d",
+      "quantity": 1,
+      "type": "Auto-Renewable Subscription",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001",
+      "inAppOwnershipType": "FAMILY_SHARED",
+      "signedDate": "@now",
+      "environment": "Production",
+      "transactionReason": "PURCHASE",
+      "storefront": "USA",
+      "storefrontId": "143441",
+      "price": 4990,
+      "currency": "USD",
+      "expiresDate": "@now+6d",
+      "offerType": 1,
+      "offerDiscountType": "FREE_TRIAL",
+      "offerPeriod": "P1W",
+      "revocationDate": "@now-1m",
+      "revocationReason": 0
+    }
+  },
+  "version": "2.0",
+  "signedDate": "@now"
+}

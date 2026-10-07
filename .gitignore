@@ -1,0 +1,10 @@
+/vendor/
+/node_modules/
+.DS_Store
+*.log
+composer.lock
+/.idea/
+.phpunit.cache/
+/auth.json
+.env
+.phpunit.result.cache

@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "packageName": "com.example.app",
+  "eventTimeMillis": "@now:str",
+  "subscriptionNotification": {
+    "version": "1.0",
+    "notificationType": 4,
+    "purchaseToken": "gp-sub-token-1.AO-J1OyTestSubscriptionToken"
+  }
+}

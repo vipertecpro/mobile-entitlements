@@ -1,0 +1,67 @@
+{
+    "name": "vipertecpro/mobile-entitlements",
+    "description": "Verified App Store Server Notifications V2 and Google Play RTDN webhooks with a per-user entitlement table for Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "in-app-purchase",
+        "app-store",
+        "google-play",
+        "subscriptions",
+        "entitlements",
+        "storekit",
+        "rtdn"
+    ],
+    "authors": [
+        {
+            "name": "vipertecpro",
+            "homepage": "https://vipertecpro.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "firebase/php-jwt": "^7.0",
+        "laravel/framework": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.20",
+        "orchestra/testbench": "^10.0|^11.0",
+        "pestphp/pest": "^4.0|^5.0",
+        "pestphp/pest-plugin-laravel": "^4.0|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vipertecpro\\MobileEntitlements\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vipertecpro\\MobileEntitlements\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vipertecpro\\MobileEntitlements\\MobileEntitlementsServiceProvider"
+            ],
+            "aliases": {
+                "MobileEntitlements": "Vipertecpro\\MobileEntitlements\\Facades\\MobileEntitlements"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

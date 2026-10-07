@@ -1,0 +1,48 @@
+{
+  "notificationType": "GRACE_PERIOD_EXPIRED",
+  "notificationUUID": "3f33f4bd-d350-5ded-b691-a34dfee17f4c",
+  "data": {
+    "appAppleId": 1234567890,
+    "bundleId": "com.example.app",
+    "bundleVersion": "42",
+    "environment": "Production",
+    "status": 3,
+    "transactionInfo": {
+      "transactionId": "2000000000000004",
+      "originalTransactionId": "2000000000000001",
+      "webOrderLineItemId": "1000000000000004",
+      "bundleId": "com.example.app",
+      "productId": "com.example.pro.monthly",
+      "subscriptionGroupIdentifier": "21000001",
+      "purchaseDate": "@now-31d",
+      "originalPurchaseDate": "@now-1d",
+      "quantity": 1,
+      "type": "Auto-Renewable Subscription",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001",
+      "inAppOwnershipType": "PURCHASED",
+      "signedDate": "@now",
+      "environment": "Production",
+      "transactionReason": "RENEWAL",
+      "storefront": "USA",
+      "storefrontId": "143441",
+      "price": 4990,
+      "currency": "USD",
+      "expiresDate": "@now-1h"
+    },
+    "renewalInfo": {
+      "originalTransactionId": "2000000000000001",
+      "autoRenewProductId": "com.example.pro.monthly",
+      "productId": "com.example.pro.monthly",
+      "autoRenewStatus": 1,
+      "signedDate": "@now",
+      "environment": "Production",
+      "recentSubscriptionStartDate": "@now-1d",
+      "renewalDate": "@now+6d",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001",
+      "isInBillingRetryPeriod": true,
+      "gracePeriodExpiresDate": "@now-1m"
+    }
+  },
+  "version": "2.0",
+  "signedDate": "@now"
+}

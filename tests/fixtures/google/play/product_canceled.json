@@ -1,0 +1,11 @@
+{
+  "kind": "androidpublisher#productPurchase",
+  "purchaseTimeMillis": "@now-1m:str",
+  "purchaseState": 1,
+  "consumptionState": 0,
+  "orderId": "GPA.3302-0000-0000-00001",
+  "acknowledgementState": 0,
+  "productId": "lifetime_unlock",
+  "quantity": 1,
+  "regionCode": "US"
+}

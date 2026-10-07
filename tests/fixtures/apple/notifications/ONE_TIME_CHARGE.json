@@ -1,0 +1,31 @@
+{
+  "notificationType": "ONE_TIME_CHARGE",
+  "notificationUUID": "7bc45d03-17af-5f2b-a7d1-971c46873b40",
+  "data": {
+    "appAppleId": 1234567890,
+    "bundleId": "com.example.app",
+    "bundleVersion": "42",
+    "environment": "Production",
+    "transactionInfo": {
+      "transactionId": "3000000000000001",
+      "originalTransactionId": "3000000000000001",
+      "bundleId": "com.example.app",
+      "productId": "com.example.lifetime",
+      "purchaseDate": "@now-1m",
+      "originalPurchaseDate": "@now-1m",
+      "quantity": 1,
+      "type": "Non-Consumable",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001",
+      "inAppOwnershipType": "PURCHASED",
+      "signedDate": "@now",
+      "environment": "Production",
+      "transactionReason": "PURCHASE",
+      "storefront": "USA",
+      "storefrontId": "143441",
+      "price": 99990,
+      "currency": "USD"
+    }
+  },
+  "version": "2.0",
+  "signedDate": "@now"
+}

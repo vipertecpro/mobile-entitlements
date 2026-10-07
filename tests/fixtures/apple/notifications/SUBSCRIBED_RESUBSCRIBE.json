@@ -1,0 +1,47 @@
+{
+  "notificationType": "SUBSCRIBED",
+  "subtype": "RESUBSCRIBE",
+  "notificationUUID": "b5146e54-6e00-57d1-8b0b-9bf68b7eae32",
+  "data": {
+    "appAppleId": 1234567890,
+    "bundleId": "com.example.app",
+    "bundleVersion": "42",
+    "environment": "Production",
+    "status": 1,
+    "transactionInfo": {
+      "transactionId": "2000000000000006",
+      "originalTransactionId": "2000000000000001",
+      "webOrderLineItemId": "1000000000000006",
+      "bundleId": "com.example.app",
+      "productId": "com.example.pro.monthly",
+      "subscriptionGroupIdentifier": "21000001",
+      "purchaseDate": "@now-1m",
+      "originalPurchaseDate": "@now-60d",
+      "quantity": 1,
+      "type": "Auto-Renewable Subscription",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001",
+      "inAppOwnershipType": "PURCHASED",
+      "signedDate": "@now",
+      "environment": "Production",
+      "transactionReason": "PURCHASE",
+      "storefront": "USA",
+      "storefrontId": "143441",
+      "price": 4990,
+      "currency": "USD",
+      "expiresDate": "@now+30d"
+    },
+    "renewalInfo": {
+      "originalTransactionId": "2000000000000001",
+      "autoRenewProductId": "com.example.pro.monthly",
+      "productId": "com.example.pro.monthly",
+      "autoRenewStatus": 1,
+      "signedDate": "@now",
+      "environment": "Production",
+      "recentSubscriptionStartDate": "@now-1d",
+      "renewalDate": "@now+30d",
+      "appAccountToken": "a1b2c3d4-0000-4000-8000-000000000001"
+    }
+  },
+  "version": "2.0",
+  "signedDate": "@now"
+}
