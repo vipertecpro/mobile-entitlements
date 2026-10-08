@@ -440,7 +440,7 @@ Unknown tokens fail verification, like a real store would.
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE).
+MIT. The LICENSE file is included with the package.
 
 Apple, App Store and StoreKit are trademarks of Apple Inc. Google Play and Google Cloud Pub/Sub are
 trademarks of Google LLC. NativePHP is a trademark of its respective owner. This package is an
