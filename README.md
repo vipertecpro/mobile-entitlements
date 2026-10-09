@@ -396,6 +396,52 @@ Gate::define('redeemMobileEntitlementsPromoOffer', function ($user, string $prod
 
 With `promo_offers` off (the default) the endpoint answers 403. Without a key it answers 503.
 
+## What you can build
+
+Mobile Entitlements is a building block: verifying store notifications and keeping an
+entitlement table your API can trust is done, and the product around it is yours. Sell
+digital features inside your app through the App Store's and Google Play's own in-app
+purchases, as their rules require; this package is the server side of those purchases.
+
+**Subscriptions and content**
+
+- **Premium articles, podcasts and video.** Put your paid content API behind
+  `entitled:pro`, so only verified subscribers get it, whatever the app sends.
+- **Fitness and coaching apps.** Gate workout plans and programmes on the server. Billing
+  grace periods keep access open while the store retries a failed payment, so paying
+  customers are not locked out by a card problem.
+- **Language and course apps.** Offer a monthly plan and a lifetime unlock side by side,
+  and check either key with `entitled:pro,lifetime`.
+
+**Games and consumables**
+
+- **Coins, gems and credits.** Listen for `EntitlementGranted` on a consumable and add to
+  the player's balance in your own table. Each purchase is stored once, so a retried
+  webhook or a repeated `/sync` never pays out twice.
+
+**SaaS and multi-platform products**
+
+- **One account on iPhone, Android and the web.** The entitlement belongs to the user, so
+  a subscription bought on one phone unlocks the same features in your other app and
+  your Laravel web app.
+- **Mobile companions for a SaaS product.** Check `hasEntitlement()` in the same policies
+  and middleware the web app already uses.
+
+**Operations and retention**
+
+- **Founder dashboards.** Feed the `/summary` endpoint or `mobile-entitlements:report`
+  into an admin page with active subscribers, trials, churn and refunds per store.
+- **Support tools.** When a customer says they paid but have no access, look up their
+  entitlements and run `mobile-entitlements:reconcile --user=<id>` to ask the stores
+  again.
+- **Win-back offers.** When `EntitlementRevoked` fires for an expired subscription, show
+  an App Store promotional offer in the app, signed by `/promo-signature`. Email only
+  people who agreed to hear from you.
+
+The package stores purchases and grants access; it does not set prices, show a paywall or
+send emails. Those stay in your app, and the stores' rules for in-app purchases and
+subscription offers apply to them.
+
 ## Testing with fakes
 
 `MobileEntitlements::fake()` replaces store verification with purchases you define. Everything
