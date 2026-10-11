@@ -54,6 +54,9 @@
             "aliases": {
                 "MobileEntitlements": "Vipertecpro\\MobileEntitlements\\Facades\\MobileEntitlements"
             }
+        },
+        "marketplace": {
+            "icon": "marketplace/icon.png"
         }
     },
     "config": {
