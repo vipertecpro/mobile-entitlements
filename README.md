@@ -1,5 +1,7 @@
 # Mobile Entitlements for Laravel
 
+![Latest version](https://img.shields.io/packagist/v/vipertecpro/mobile-entitlements) ![Tests](https://img.shields.io/github/actions/workflow/status/vipertecpro/mobile-entitlements/tests.yml?branch=main&label=tests) ![PHP](https://img.shields.io/packagist/dependency-v/vipertecpro/mobile-entitlements/php) ![Laravel](https://img.shields.io/packagist/dependency-v/vipertecpro/mobile-entitlements/laravel%2Fframework) ![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-informational) ![Licence](https://img.shields.io/packagist/l/vipertecpro/mobile-entitlements) ![Downloads](https://img.shields.io/packagist/dt/vipertecpro/mobile-entitlements)
+
 Receive and verify App Store Server Notifications V2 and Google Play Real-time Developer
 Notifications, and keep a per-user entitlement table your Laravel backend can trust. Works with any
 mobile client: Flutter, React Native, Swift, Kotlin or NativePHP.
